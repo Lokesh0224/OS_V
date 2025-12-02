@@ -81,6 +81,7 @@
 const input = document.getElementById("commandInput");
 const output = document.getElementById("output");
 const promptEl = document.getElementById("prompt");
+const cwdDisplay = document.getElementById("cwd");
 
 const SERVER_URL = "http://localhost:3000/exec";
 
@@ -97,7 +98,19 @@ function appendLine(text, className = "") {
 
 function updatePrompt(newPath) {
   cwd = newPath;
-  promptEl.textContent = `${cwd}>`;
+
+  // derive folder name from full path
+  let folderName = "~";
+  if (cwd === "/") {
+    folderName = "/";
+  } else if (cwd) {
+    const parts = cwd.split('/').filter(Boolean);
+    folderName = parts.length ? parts[parts.length - 1] : "/";
+  }
+
+  // update prompt and top bar (if present)
+  promptEl.textContent = `${folderName}>`;
+  if (cwdDisplay) cwdDisplay.textContent = folderName;
 }
 
 function processShellOutput(raw) {
@@ -106,6 +119,13 @@ function processShellOutput(raw) {
   const lines = raw.split(/\r?\n/);
   for (let ln of lines) {
     if (!ln) continue;
+
+    if (ln.startsWith("__CWD__:")) {
+      const rest = ln.replace("__CWD__:", "").trim();
+      // rest is full path from backend; update prompt/top display
+      updatePrompt(rest);
+      continue;
+    }
 
     if (ln.startsWith("__CMD_ECHO__:")) {
       const rest = ln.replace("__CMD_ECHO__:", "");

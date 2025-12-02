@@ -50,6 +50,9 @@ function execCommandAndCollect(cmd, timeoutMs = 200) {
 
   // Write command to shell stdin
   shellProc.stdin.write(cmd + "\n");
+  // After the command completes, ask the shell to print its current working directory
+  // in a machine-readable marker so the frontend can update the UI.
+  shellProc.stdin.write('echo "__CWD__:$PWD"\n');
 
   // Return a Promise that resolves after timeoutMs with current buffers
   return new Promise((resolve) => {
