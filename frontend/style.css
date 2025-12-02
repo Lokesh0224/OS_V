@@ -1,0 +1,52 @@
+body {
+    margin: 0;
+    background: #000;
+    color: #eee;
+    font-family: monospace;
+}
+
+.terminal {
+    width: 90%;
+    height: 90vh;
+    margin: 20px auto;
+    border: 2px solid #00ffaa;
+    padding: 10px;
+    overflow-y: auto;
+}
+
+.green { color: #00ff00; font-weight: bold; }
+.cyan { color: #00e6e6; }
+.error { color: #ff5050; }
+
+.output {
+    white-space: pre-wrap;
+    margin-bottom: 10px;
+    font-size: 1rem;
+    line-height: 1.4;
+}
+
+.input-line {
+    display: flex;
+    align-items: center;
+}
+
+#commandInput {
+    background: none;
+    border: none;
+    color: #fff;
+    font-size: 1rem;
+    flex: 1;
+    outline: none;
+}
+
+.caret {
+    width: 7px;
+    height: 17px;
+    background: #fff;
+    margin-left: 3px;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% { opacity: 0; }
+}
